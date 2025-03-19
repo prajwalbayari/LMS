@@ -1,16 +1,47 @@
 import CommonForm from "@/components/common-form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { signinFormControls, signupFormControls } from "@/config";
+import { AuthContext } from "@/context/auth-context";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { GraduationCap } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 function AuthPage() {
   const [activeTab, setActiveTab] = useState("signin");
+  const {
+    signInFormData,
+    setSignInFormData,
+    signUpFormData,
+    setSignUpFormData,
+  } = useContext(AuthContext);
 
   function handleTabChange(value) {
     setActiveTab(value);
+  }
+
+  function checkIfSignInFormIsValid() {
+    return (
+      signInFormData &&
+      /^[a-zA-Z0-9.]+@gmail\.com$/.test(signInFormData.userEmail) &&
+      signInFormData.password.length >= 6
+    );
+  }
+
+  function checkIfSignUpFormIsValid() {
+    return (
+      signUpFormData &&
+      signUpFormData.userName !=='' &&
+      signUpFormData.password.length >= 6 &&
+      /^[a-zA-Z0-9.]+@gmail\.com$/.test(signUpFormData.userEmail)
+    );
   }
 
   return (
@@ -21,7 +52,7 @@ function AuthPage() {
           <span className="font-extrabold text-xl">LMS LEARN</span>
         </Link>
       </header>
-      <div className="flex items-center justify-center min-h-screen bg-background">
+      <div className="flex items-center justify-center min-h-screen bg-background px-4">
         <Tabs
           value={activeTab}
           defaultValue="signin"
@@ -32,21 +63,50 @@ function AuthPage() {
             <TabsTrigger value="signin">Sign In</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
-          <div className="mt-4 overflow-hidden" style={{ minHeight: "400px" }}>
-            {" "}
-            <TabsContent
-              value="signin"
-              className="transition-all duration-300 ease-in-out"
-            >
-              <CommonForm formControls={signinFormControls} />
-            </TabsContent>
-            <TabsContent
-              value="signup"
-              className="transition-all duration-300 ease-in-out"
-            >
-              <CommonForm formControls={signupFormControls} />
-            </TabsContent>
-          </div>
+          <TabsContent
+            value="signin"
+            className="transition-all duration-300 ease-in-out"
+          >
+            <Card className="p-6 space-y-4">
+              <CardHeader>
+                <CardTitle>Sign in to your account</CardTitle>
+                <CardDescription>
+                  Enter your email and password to access your account
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CommonForm
+                  formControls={signinFormControls}
+                  buttonText={"Sign In"}
+                  formData={signInFormData}
+                  setFormData={setSignInFormData}
+                  isButtonDisabled={!checkIfSignInFormIsValid()}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
+          <TabsContent
+            value="signup"
+            className="transition-all duration-300 ease-in-out"
+          >
+            <Card className="p-6 space-y-4">
+              <CardHeader>
+                <CardTitle>Create a new account</CardTitle>
+                <CardDescription>
+                  Enter your details to get started
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <CommonForm
+                  formControls={signupFormControls}
+                  buttonText={"Sign Up"}
+                  formData={signUpFormData}
+                  setFormData={setSignUpFormData}
+                  isButtonDisabled={!checkIfSignUpFormIsValid()}
+                />
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
       </div>
     </div>

@@ -7,6 +7,7 @@ function CommonForm({
   formControls = [],
   formData,
   setFormData,
+  isButtonDisabled = false,
 }) {
   return (
     <form onSubmit={handleSumbit}>
@@ -15,7 +16,9 @@ function CommonForm({
         formData={formData}
         setFormData={setFormData}
       />
-      <Button type="submit" className="mt-5 w-full" >{buttonText || "Submit"}</Button>
+      <Button disabled={isButtonDisabled} type="submit" className="mt-5 w-full">
+        {buttonText || "Submit"}
+      </Button>
     </form>
   );
 }
