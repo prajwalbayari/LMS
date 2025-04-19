@@ -10,14 +10,14 @@ export const signupFormControls = [
     name: "userEmail",
     label: "Email",
     placeholder: "Enter your email",
-    type: "text",
+    type: "email",
     componentType: "input",
   },
   {
     name: "password",
     label: "Password",
     placeholder: "Enter your password",
-    type: "text",
+    type: "password",
     componentType: "input",
   },
 ];
@@ -27,14 +27,14 @@ export const signinFormControls = [
     name: "userEmail",
     label: "Email",
     placeholder: "Enter your email",
-    type: "text",
+    type: "email",
     componentType: "input",
   },
   {
     name: "password",
     label: "Password",
     placeholder: "Enter your password",
-    type: "text",
+    type: "password",
     componentType: "input",
   },
 ];

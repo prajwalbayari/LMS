@@ -21,6 +21,7 @@ function AuthPage() {
     setSignInFormData,
     signUpFormData,
     setSignUpFormData,
+    handleRegisteredUser,
   } = useContext(AuthContext);
 
   function handleTabChange(value) {
@@ -38,7 +39,7 @@ function AuthPage() {
   function checkIfSignUpFormIsValid() {
     return (
       signUpFormData &&
-      signUpFormData.userName !=='' &&
+      signUpFormData.userName !== "" &&
       signUpFormData.password.length >= 6 &&
       /^[a-zA-Z0-9.]+@gmail\.com$/.test(signUpFormData.userEmail)
     );
@@ -103,6 +104,7 @@ function AuthPage() {
                   formData={signUpFormData}
                   setFormData={setSignUpFormData}
                   isButtonDisabled={!checkIfSignUpFormIsValid()}
+                  handleSumbit={handleRegisteredUser}
                 />
               </CardContent>
             </Card>
