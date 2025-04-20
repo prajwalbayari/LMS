@@ -48,7 +48,7 @@ export const loginUser = async (req, res) => {
       role: checkUser.role,
     },
     "JWT_SECRET",
-    { expiresIn: "120m" }
+    { expiresIn: "7d" }
   );
 
   return res.status(201).json({
