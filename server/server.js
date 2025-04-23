@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import "./config/env.js";
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
@@ -8,7 +8,6 @@ import mediaRoutes from "./routes/instructor-routes/media-routes.js";
 const app = express();
 
 app.use(express.json());
-dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
