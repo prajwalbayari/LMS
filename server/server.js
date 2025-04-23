@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth-routes/index.js";
+import mediaRoutes from "./routes/instructor-routes/media-routes.js";
 
 const app = express();
 
@@ -28,6 +29,7 @@ mongoose
 
 //Route configuration
 app.use("/auth", authRoutes);
+app.use("/media", mediaRoutes);
 
 //Global error handler
 app.use((err, req, res, next) => {
