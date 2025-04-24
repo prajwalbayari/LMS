@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import VideoPlayer from "@/components/video-player";
 import { courseCurriculumInitialFormData } from "@/config";
 import { InstructorContext } from "@/context/instructor-context";
-import { mediaUploadService } from "@/services";
+import { mediaDeleteService, mediaUploadService } from "@/services";
 import { useContext } from "react";
 
 function CourseCurriculum() {
@@ -40,10 +40,8 @@ function CourseCurriculum() {
   }
 
   function handleFreePreviewChange(currentValue, currentIndex) {
-    console.log(currentValue);
     let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
 
-    console.log(cpyCourseCurriculumFormData);
     cpyCourseCurriculumFormData[currentIndex] = {
       ...cpyCourseCurriculumFormData[currentIndex],
       freePreview: currentValue,
@@ -53,7 +51,6 @@ function CourseCurriculum() {
   }
 
   async function handleSingleLectureUpload(event, curIndex) {
-    console.log(event.target.files);
 
     const selectedFile = event.target.files[0];
     if (selectedFile) {
@@ -83,6 +80,37 @@ function CourseCurriculum() {
     }
   }
 
+  async function handleReplaceVideo(curIndex) {
+    let cpyCourseCurriculumFormData = [...courseCurriculumFormData];
+    const getCurrentVideoPublicId =
+      cpyCourseCurriculumFormData[curIndex].publi_id;
+
+    const deleteCurrentMediaResponse = await mediaDeleteService(
+      getCurrentVideoPublicId
+    );
+
+    if (deleteCurrentMediaResponse?.success) {
+      cpyCourseCurriculumFormData[curIndex] = {
+        ...cpyCourseCurriculumFormData[curIndex],
+        videoURL: "",
+        public_id: "",
+      };
+    }
+
+    setCourseCurriculumFormData(cpyCourseCurriculumFormData);
+  }
+
+  function isCourseCurriculmFormDataValid() {
+    return courseCurriculumFormData.every((item) => {
+      return (
+        item &&
+        typeof item === "object" &&
+        item.title.trim() !== "" &&
+        item.videoURL.trim() !== ""
+      );
+    });
+  }
+
   console.log(courseCurriculumFormData);
   return (
     <Card>
@@ -90,7 +118,12 @@ function CourseCurriculum() {
         <CardTitle>Create Course Curriculum</CardTitle>
       </CardHeader>
       <CardContent>
-        <Button onClick={handleNewLecture}>Add Lecture</Button>
+        <Button
+          disabled={!isCourseCurriculmFormDataValid() || mediaUploadProgress}
+          onClick={handleNewLecture}
+        >
+          Add Lecture
+        </Button>
         {mediaUploadProgress ? (
           <MediaProgressBar
             isMediaUploading={mediaUploadProgress}
@@ -130,7 +163,9 @@ function CourseCurriculum() {
                       width="450px"
                       height="250px"
                     />
-                    <Button>Replace Video</Button>
+                    <Button onClick={() => handleReplaceVideo(index)}>
+                      Replace Video
+                    </Button>
                     <Button className="bg-red-700">Delete Lecture</Button>
                   </div>
                 ) : (
