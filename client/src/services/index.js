@@ -31,7 +31,7 @@ export async function mediaUploadService(formData, onProgressCallback) {
 }
 
 export async function mediaDeleteService(id) {
-  const { data } = await axiosInstance.delete(`/media/delete/:${id}`);
+  const { data } = await axiosInstance.delete(`/media/delete/${id}`);
   return data;
 }
 
@@ -46,7 +46,9 @@ export async function addNewCourseService(formData) {
 }
 
 export async function fetchInstructorCourseDetailsService(id) {
-  const { data } = await axiosInstance.get(`/instructor/course/details/${id}`);
+  const { data } = await axiosInstance.get(
+    `/instructor/course/get/details/${id}`
+  );
   return data;
 }
 
