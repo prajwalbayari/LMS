@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import VideoPlayer from "@/components/video-player";
 import { courseCurriculumInitialFormData } from "@/config";
 import { InstructorContext } from "@/context/instructor-context";
 import { mediaUploadService } from "@/services";
@@ -98,7 +99,7 @@ function CourseCurriculum() {
         ) : null}
         <div className="mt-4 space-y-4">
           {courseCurriculumFormData.map((curriculumItem, index) => (
-            <div key={index } className="border p-5 rounded-md">
+            <div key={index} className="border p-5 rounded-md">
               <div className="flex gap-5 items-center">
                 <h3 className="font-semibold">Lecture {index + 1}</h3>
                 <Input
@@ -122,11 +123,25 @@ function CourseCurriculum() {
                 </div>
               </div>
               <div className="mt-6">
-                <Input
-                  type="file"
-                  accept="video/*"
-                  onChange={(event) => handleSingleLectureUpload(event, index)}
-                />
+                {courseCurriculumFormData[index]?.videoURL ? (
+                  <div className="flex gap-3">
+                    <VideoPlayer
+                      url={courseCurriculumFormData[index].videoURL}
+                      width="450px"
+                      height="250px"
+                    />
+                    <Button>Replace Video</Button>
+                    <Button className="bg-red-700">Delete Lecture</Button>
+                  </div>
+                ) : (
+                  <Input
+                    type="file"
+                    accept="video/*"
+                    onChange={(event) =>
+                      handleSingleLectureUpload(event, index)
+                    }
+                  />
+                )}
               </div>
             </div>
           ))}
