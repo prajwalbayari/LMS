@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import authRoutes from "./routes/auth-routes/index.js";
 import mediaRoutes from "./routes/instructor-routes/media-routes.js";
+import instructorCourseRoutes from "./routes/instructor-routes/course-routes.js";
 
 const app = express();
 
@@ -29,6 +30,7 @@ mongoose
 //Route configuration
 app.use("/auth", authRoutes);
 app.use("/media", mediaRoutes);
+app.use("/instructor/course", instructorCourseRoutes);
 
 //Global error handler
 app.use((err, req, res, next) => {

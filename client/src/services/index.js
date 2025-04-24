@@ -1,5 +1,4 @@
 import axiosInstance from "@/api/axiosInstance";
-import { progressPercentage } from "framer-motion";
 
 export async function registerService(formData) {
   const data = await axiosInstance.post("/auth/register", {
