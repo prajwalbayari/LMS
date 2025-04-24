@@ -1,4 +1,4 @@
-import { Course } from "../../models/Course.js";
+import Course from "../../models/Course.js";
 
 const addNewCourse = async (req, res) => {
   try {
@@ -88,9 +88,4 @@ const updateCourseById = async (req, res) => {
   }
 };
 
-export default {
-  getAllCourses,
-  getCourseDetailsById,
-  addNewCourse,
-  updateCourseById,
-};
+export { getAllCourses, getCourseDetailsById, addNewCourse, updateCourseById };
