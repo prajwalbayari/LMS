@@ -30,7 +30,6 @@ function AddNewCoursePage() {
   const { auth } = useContext(AuthContext);
   const navigate = new useNavigate();
   const params = useParams();
-  console.log(params.courseId);
   function isEmpty(value) {
     if (Array.isArray(value)) {
       return value.length === 0;

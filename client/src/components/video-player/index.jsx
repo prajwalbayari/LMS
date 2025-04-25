@@ -116,7 +116,7 @@ function VideoPlayer({ width = "100%", height = "100%", url }) {
       }`}
       style={{ width, height }}
       onMouseMove={handleMouseMove}
-      oneMouseLeave={() => setShowControls(false)}
+      onMouseLeave={() => setShowControls(false)}
     >
       <ReactPlayer
         ref={playerRef}

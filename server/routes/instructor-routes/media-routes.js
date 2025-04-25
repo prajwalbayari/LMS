@@ -38,4 +38,22 @@ router.delete("/delete/:id", async (req, res) => {
   }
 });
 
+router.post("/bulk-upload", upload.array("files", 10), async (req, res) => {
+  try {
+    const uploadPromises = req.files.map((fileItem) =>
+      uploadMediaToCloudinary(fileItem.path)
+    );
+    const result = await Promise.all(uploadPromises);
+    res.status(200).json({
+      success: true,
+      data: result,
+    });
+  } catch (event) {
+    console.log(event);
+    res
+      .status(500)
+      .json({ success: false, message: "Error in Bulk Uploading" });
+  }
+});
+
 export default router;
