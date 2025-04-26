@@ -66,11 +66,11 @@ function AddNewCoursePage() {
 
   async function handleCreateCourse() {
     const courseFinalFormData = {
-      instructoId: auth?.user?._id,
-      instructoName: auth?.user?.userName,
+      instructorId: auth?.user?._id,
+      instructorName: auth?.user?.userName,
       date: new Date(),
       ...courseLandingFormData,
-      stundets: [],
+      students: [],
       curriculum: courseCurriculumFormData,
       isPublished: true,
     };

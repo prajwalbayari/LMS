@@ -8,8 +8,8 @@ const LectureSchema = new mongoose.Schema({
 });
 
 const CourseSchema = new mongoose.Schema({
-  instructoId: String,
-  instructoName: String,
+  instructorId: String,
+  instructorName: String,
   date: Date,
   title: String,
   category: String,
@@ -21,7 +21,7 @@ const CourseSchema = new mongoose.Schema({
   welcomeMessage: String,
   pricing: Number,
   objectives: String,
-  stundets: [
+  students: [
     {
       studentId: String,
       studentName: String,
