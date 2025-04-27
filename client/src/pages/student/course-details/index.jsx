@@ -206,12 +206,25 @@ function StudentViewCourseDetailsPage() {
               Anyone who has this link will be able to view this.
             </DialogDescription>
           </DialogHeader>
-          <div className="aspect-video mb-4 rounded-lg flex items-center justify-center">
+          <div className="aspect-video rounded-lg flex items-center justify-center">
             <VideoPlayer
               url={displayCurrentVideoFreePreview}
               width="450px"
               height="200px"
             />
+          </div>
+          <div className="flex flex-col gap-2">
+            {studentViewCourseDetails?.curriculum
+              ?.filter((item) => item.freePreview)
+              .map((filteredItem, index) => (
+                <p
+                  key={index}
+                  onClick={() => handleSetFreePreview(filteredItem)}
+                  className="cursor-pointer text-[16px] font-medium"
+                >
+                  {filteredItem.title}
+                </p>
+              ))}
           </div>
           <DialogFooter className="sm:justify-start">
             <DialogClose asChild>
