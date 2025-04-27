@@ -4,7 +4,7 @@ import {
   capturePaymentAndFinalizeOrder,
 } from "../../controllers/student-controller/order-controller.js";
 
-router = express.Router();
+const router = express.Router();
 
 router.post("/create", createOrder);
 router.post("/capture", capturePaymentAndFinalizeOrder);

@@ -11,6 +11,7 @@ const createOrder = async (req, res) => {
       userEmail,
       orderStatus,
       paymentMethod,
+      paymentStatus,
       orderDate,
       paymentId,
       payerId,
@@ -67,6 +68,7 @@ const createOrder = async (req, res) => {
           userEmail,
           orderStatus,
           paymentMethod,
+          paymentStatus,
           orderDate,
           paymentId,
           payerId,
@@ -84,7 +86,7 @@ const createOrder = async (req, res) => {
           (link) => link.rel == "approval_url"
         ).href;
 
-        res.status(201).json({
+        return res.status(201).json({
           success: true,
           data: {
             approvalURL,
@@ -95,7 +97,7 @@ const createOrder = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Some error Occurred during payment",
     });
@@ -109,7 +111,7 @@ const capturePaymentAndFinalizeOrder = async (req, res) => {
     let order = await Order.findById(orderId);
 
     if (!order) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "Order cannot be found",
       });
@@ -169,15 +171,14 @@ const capturePaymentAndFinalizeOrder = async (req, res) => {
       },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Order confirmed",
       data: order,
     });
-    
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Some error Occurred during payment",
     });
