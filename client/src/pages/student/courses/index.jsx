@@ -15,7 +15,7 @@ import { StudentContext } from "@/context/student-context";
 import { fetchStudentViewCourseListService } from "@/services";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
@@ -40,6 +40,7 @@ function StudentViewCoursesPage() {
   const [sort, setSort] = useState("price-lowtohigh");
   const [filters, setFilters] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   async function fetchAllStudentViewCourses(filters, sort) {
     const query = new URLSearchParams({ ...filters, sortBy: sort });
@@ -112,7 +113,7 @@ function StudentViewCoursesPage() {
                           filters &&
                           Object.keys(filters).length > 0 &&
                           filters[keyItem] &&
-                          filters[keyItem].indexOf(option.id) > -1  
+                          filters[keyItem].indexOf(option.id) > -1
                         }
                         onCheckedChange={() =>
                           handleFilterOnChange(keyItem, option)
@@ -163,7 +164,13 @@ function StudentViewCoursesPage() {
           <div className="space-y-4">
             {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
               studentViewCoursesList.map((courseItem) => (
-                <Card className="cursor-pointer" key={courseItem?._id}>
+                <Card
+                  onClick={() =>
+                    navigate(`/courses/details/${courseItem?._id}`)
+                  }
+                  className="cursor-pointer"
+                  key={courseItem?._id}
+                >
                   <CardContent className="flex gap-4 p-4">
                     <div className="w-48 h-32 flex-shrink-0">
                       <img

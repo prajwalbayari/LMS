@@ -4,10 +4,13 @@ import { useContext, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { StudentContext } from "@/context/student-context";
 import { fetchStudentViewCourseListService } from "@/services";
+import { useNavigate } from "react-router-dom";
 
 function StudentHomePage() {
   const { studentViewCoursesList, setStudentViewCoursesList } =
     useContext(StudentContext);
+
+  const navigate = useNavigate();
 
   async function fetchAllStudentViewCourses() {
     const response = await fetchStudentViewCourseListService();
@@ -59,6 +62,7 @@ function StudentHomePage() {
           {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
             studentViewCoursesList.map((courseItem) => (
               <div
+                onClick={() => navigate(`/courses/details/${courseItem?._id}`)}
                 key={courseItem._id}
                 className="border rounded-lg overflow-hidden shadow cursor-pointer"
               >
