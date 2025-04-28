@@ -1,4 +1,5 @@
 import Course from "../../models/Course.js";
+import StudentCourses from "../../models/StudentCourses.js";
 
 const getAllStudentViewCourses = async (req, res) => {
   try {
@@ -56,20 +57,29 @@ const getAllStudentViewCourses = async (req, res) => {
 
 const getStudentViewCourseDetails = async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id, studentId } = req.params;
     const courseDetails = await Course.findById(id);
 
     if (!courseDetails) {
       return res.status(404).json({
         success: false,
         message: "No course details found",
-        data: [],
+        data: null,
       });
     }
+
+    const studentCourse = await StudentCourses.findOne({
+      userId: studentId,
+    });
+
+    const ifStudentAlreadyBoughtCurrentCourse =
+      studentCourse.courses.findIndex((item) => item.courseId === id) > -1;
+
     res.status(200).json({
       success: true,
       message: "Fetched course details",
       data: courseDetails,
+      coursePurchaseId: ifStudentAlreadyBoughtCurrentCourse ? id : null,
     });
   } catch (error) {
     console.log(error);

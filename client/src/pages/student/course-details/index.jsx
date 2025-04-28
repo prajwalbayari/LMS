@@ -19,7 +19,7 @@ import {
 } from "@/services";
 import { CheckCircle, Globe, Lock, PlayCircle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 
 function StudentViewCourseDetailsPage() {
   const {
@@ -38,16 +38,20 @@ function StudentViewCourseDetailsPage() {
   const { id } = useParams();
   const location = useLocation();
   const { auth } = useContext(AuthContext);
+  const [coursePurchasedId, setCoursePurchasedId] = useState(null);
 
   async function fetchStudentViewCourseDetails() {
     const response = await fetchStudentViewCourseDetailsService(
-      currentCourseDetailsId
+      currentCourseDetailsId,
+      auth?.user?._id
     );
 
     if (response?.success) {
       setStudentViewCourseDetails(response.data);
+      setCoursePurchasedId(response.coursePurchaseId);
     } else {
       setStudentViewCourseDetails(null);
+      setCoursePurchasedId(null);
     }
     setLoadingState(false);
   }
@@ -99,7 +103,9 @@ function StudentViewCourseDetailsPage() {
 
   useEffect(() => {
     if (!location.pathname.includes("courses/details")) {
-      setStudentViewCourseDetails(null), setCurrentCourseDetailsId(null);
+      setStudentViewCourseDetails(null),
+        setCurrentCourseDetailsId(null),
+        setCoursePurchasedId(null);
     }
   }, [location.pathname]);
 
@@ -108,6 +114,10 @@ function StudentViewCourseDetailsPage() {
   }
 
   if (loadingState) return <Skeleton />;
+
+  if (coursePurchasedId !== null) {
+    return <Navigate to={`/course-progress/${coursePurchasedId}`} />;
+  }
 
   const getIndexOfFreePreviewUrl =
     studentViewCourseDetails !== null

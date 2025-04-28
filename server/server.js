@@ -7,6 +7,7 @@ import mediaRoutes from "./routes/instructor-routes/media-routes.js";
 import instructorCourseRoutes from "./routes/instructor-routes/course-routes.js";
 import studentViewCourseRoutes from "./routes/student-routes/course-routes.js";
 import studentViewOrderRoutes from "./routes/student-routes/order-routes.js";
+import studentCourseRoutes from "./routes/student-routes/student-courses-routes.js";
 
 const app = express();
 
@@ -35,6 +36,7 @@ app.use("/media", mediaRoutes);
 app.use("/instructor/course", instructorCourseRoutes);
 app.use("/student/course", studentViewCourseRoutes);
 app.use("/student/order", studentViewOrderRoutes);
+app.use("/student/courses-bought", studentCourseRoutes);
 
 //Global error handler
 app.use((err, req, res, next) => {

@@ -33,7 +33,10 @@ function StudentViewCommonHeader() {
       </div>
       <div className="flex items-center space-x-4 ">
         <div className="flex gap-4 items-center">
-          <div className="flex items-center gap-3">
+          <div
+            onClick={() => navigate("/student-courses")}
+            className="flex cursor-pointer items-center gap-3"
+          >
             <span className="text-[14px] md:text-[16px] font-medium">
               My courses
             </span>
