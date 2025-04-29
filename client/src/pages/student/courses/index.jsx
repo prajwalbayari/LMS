@@ -11,8 +11,12 @@ import {
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { filterOptions, sortOptions } from "@/config";
+import { AuthContext } from "@/context/auth-context";
 import { StudentContext } from "@/context/student-context";
-import { fetchStudentViewCourseListService } from "@/services";
+import {
+  checkCoursePurchaseInfoService,
+  fetchStudentViewCourseListService,
+} from "@/services";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -41,11 +45,11 @@ function StudentViewCoursesPage() {
   const [filters, setFilters] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
 
   async function fetchAllStudentViewCourses(filters, sort) {
     const query = new URLSearchParams({ ...filters, sortBy: sort });
     const response = await fetchStudentViewCourseListService(query);
-    console.log(response);
     if (response?.success) {
       setStudentViewCoursesList(response?.data);
       setLoadingState(false);
@@ -73,6 +77,21 @@ function StudentViewCoursesPage() {
     }
     setFilters(cpyFilters);
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
+  }
+
+  async function handleCourseNavigate(getCurrentCourseId) {
+    const response = await checkCoursePurchaseInfoService(
+      getCurrentCourseId,
+      auth?.user?._id
+    );
+
+    if (response?.success) {
+      if (response?.data) {
+        navigate(`/course-progress/${getCurrentCourseId}`);
+      } else {
+        navigate(`/courses/details/${getCurrentCourseId}`);
+      }
+    }
   }
 
   useEffect(() => {
@@ -106,8 +125,11 @@ function StudentViewCoursesPage() {
               <div className="p-4 space-y-4 border-b" key={keyItem}>
                 <h3 className="font-bold mb-3">{keyItem.toUpperCase()}</h3>
                 <div className="grid gap-2 mt-2">
-                  {filterOptions[keyItem].map((option) => (
-                    <Label className="flex font-medium items-center gap-3">
+                  {filterOptions[keyItem].map((option, index) => (
+                    <Label
+                      key={index}
+                      className="flex font-medium items-center gap-3"
+                    >
                       <Checkbox
                         checked={
                           filters &&
@@ -165,9 +187,7 @@ function StudentViewCoursesPage() {
             {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
               studentViewCoursesList.map((courseItem) => (
                 <Card
-                  onClick={() =>
-                    navigate(`/courses/details/${courseItem?._id}`)
-                  }
+                  onClick={() => handleCourseNavigate(courseItem?._id)}
                   className="cursor-pointer"
                   key={courseItem?._id}
                 >

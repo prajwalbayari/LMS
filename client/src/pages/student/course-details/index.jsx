@@ -14,12 +14,13 @@ import VideoPlayer from "@/components/video-player";
 import { AuthContext } from "@/context/auth-context";
 import { StudentContext } from "@/context/student-context";
 import {
+  checkCoursePurchaseInfoService,
   createPaymentService,
   fetchStudentViewCourseDetailsService,
 } from "@/services";
 import { CheckCircle, Globe, Lock, PlayCircle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { Navigate, useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 function StudentViewCourseDetailsPage() {
   const {
@@ -37,21 +38,32 @@ function StudentViewCourseDetailsPage() {
   const [approvalURL, setApprovalURL] = useState("");
   const { id } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
-  const [coursePurchasedId, setCoursePurchasedId] = useState(null);
 
   async function fetchStudentViewCourseDetails() {
+    const checkCoursePurchaseInfoResponse =
+      await checkCoursePurchaseInfoService(
+        currentCourseDetailsId,
+        auth?.user?._id
+      );
+
+    if (
+      checkCoursePurchaseInfoResponse?.success &&
+      checkCoursePurchaseInfoResponse?.data
+    ) {
+      navigate(`/course-progress/${currentCourseDetailsId}`);
+      return;
+    }
+
     const response = await fetchStudentViewCourseDetailsService(
-      currentCourseDetailsId,
-      auth?.user?._id
+      currentCourseDetailsId
     );
 
     if (response?.success) {
       setStudentViewCourseDetails(response.data);
-      setCoursePurchasedId(response.coursePurchaseId);
     } else {
       setStudentViewCourseDetails(null);
-      setCoursePurchasedId(null);
     }
     setLoadingState(false);
   }
@@ -109,14 +121,10 @@ function StudentViewCourseDetailsPage() {
     }
   }, [location.pathname]);
 
-  if (approvalURL !== "") {
-    window.location.href = approvalURL;
-  }
-
   if (loadingState) return <Skeleton />;
 
-  if (coursePurchasedId !== null) {
-    return <Navigate to={`/course-progress/${coursePurchasedId}`} />;
+  if (approvalURL !== "") {
+    window.location.href = approvalURL;
   }
 
   const getIndexOfFreePreviewUrl =
