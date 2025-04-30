@@ -115,3 +115,10 @@ export async function fetchStudentBoughtCoursesService(id) {
   const { data } = await axiosInstance.get(`/student/courses-bought/get/${id}`);
   return data;
 }
+
+export async function getCurrentCourseProgressService(userId, courseId) {
+  const { data } = await axiosInstance.get(
+    `/student/course-progress/get/${userId}/${courseId}`
+  );
+  return data;
+}
