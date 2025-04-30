@@ -3,13 +3,13 @@ import StudentCourses from "../../models/StudentCourses.js";
 const getCoursesByStudentId = async (req, res) => {
   try {
     const { studentId } = req.params;
-    const stundetCoursesBought = await StudentCourses.findOne({
+    const stundentCoursesBought = await StudentCourses.findOne({
       userId: studentId,
     });
 
     return res.status(200).json({
       success: true,
-      data: stundetCoursesBought.courses,
+      data: stundentCoursesBought?.courses,
     });
   } catch (error) {
     console.log(error);

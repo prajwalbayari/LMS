@@ -16,8 +16,6 @@ function InstructorDashboardPage() {
 
   async function fetchAllCourses() {
     const response = await fetchInstructorCourseListService();
-    console.log(response);
-
     if (response?.success) setInstructorCourseList(response?.data);
   }
 
@@ -30,7 +28,7 @@ function InstructorDashboardPage() {
       icon: BarChart,
       label: "Dashboard",
       value: "dashboard",
-      component: <InstructorDashboard />,
+      component: <InstructorDashboard listOfCourses={instructorCoursesList} />,
     },
     {
       icon: Book,

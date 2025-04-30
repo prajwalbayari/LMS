@@ -54,12 +54,14 @@ function InstructorCourses({ listOfCourses }) {
             <TableBody>
               {listOfCourses && listOfCourses.length > 0
                 ? listOfCourses.map((course) => (
-                    <TableRow key={course}>
+                    <TableRow key={course._id}>
                       <TableCell className="font-medium">
                         {course?.title}
                       </TableCell>
-                      <TableCell>{course?.students?.length || 0}</TableCell>
-                      <TableCell>${course?.pricing}</TableCell>
+                      <TableCell>{course?.students?.length}</TableCell>
+                      <TableCell>
+                        ${course?.students?.length * course?.pricing}
+                      </TableCell>
                       <TableCell className="text-right">
                         <Button
                           onClick={() => {
