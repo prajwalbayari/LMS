@@ -13,7 +13,13 @@ import {
   VolumeX,
 } from "lucide-react";
 
-function VideoPlayer({ width = "100%", height = "100%", url }) {
+function VideoPlayer({
+  width = "100%",
+  height = "100%",
+  url,
+  onProgressUpdate,
+  progressData,
+}) {
   const [playing, setPlaying] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [muted, setMuted] = useState(false);
@@ -107,6 +113,15 @@ function VideoPlayer({ width = "100%", height = "100%", url }) {
     clearTimeout(controlTimeOutRef.current);
     controlTimeOutRef.current = setTimeout(() => setShowControls(false), 3000);
   }
+
+  useEffect(() => {
+    if (played === 1) {
+      onProgressUpdate({
+        ...progressData,
+        progressValue: played,
+      });
+    }
+  }, [played]);
 
   return (
     <div

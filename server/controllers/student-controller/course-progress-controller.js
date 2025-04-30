@@ -1,9 +1,69 @@
 import CourseProgress from "../../models/CourseProgress.js";
 import Course from "../../models/Course.js";
 import StudentCourses from "../../models/StudentCourses.js";
+import courseProgress from "../../models/CourseProgress.js";
 
-const markCurrentLecureAsViewd = async (req, res) => {
+const markCurrentLecureAsViewed = async (req, res) => {
   try {
+    const { userId, courseId, lectureId } = req.body;
+    let progress = await courseProgress.findOne({ userId, courseId });
+
+    if (!progress) {
+      progress = new CourseProgress({
+        userId,
+        courseId,
+        lecturesProgress: [
+          {
+            lectureId,
+            viewed: true,
+            dateViewed: new Date(),
+          },
+        ],
+      });
+
+      await progress.save();
+    } else {
+      const lectureProgress = progress.lecturesProgress.find(
+        (item) => item.lectureId === lectureId
+      );
+
+      if (lectureProgress) {
+        lectureProgress.viewed = true;
+        lectureProgress.dateViewed = new Date();
+      } else {
+        progress.lecturesProgress.push({
+          lectureId,
+          viewed: true,
+          dateViewed: new Date(),
+        });
+      }
+      await progress.save();
+    }
+
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found",
+      });
+    }
+
+    const allLectureresViewed =
+      progress.lecturesProgress.length === course.curriculum.length &&
+      progress.lecturesProgress.every((item) => item.viewed);
+
+    if (allLectureresViewed) {
+      (progress.completed = true), (progress.completionDate = new Date());
+
+      await progress.save();
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Lecture marked as viewed",
+      data: progress,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -91,6 +151,28 @@ const getCurrentCourseProgress = async (req, res) => {
 
 const resetCurrentCourseProgress = async (req, res) => {
   try {
+    const { userId, courseId } = req.body;
+
+    const progress = await courseProgress.findOne({ userId, courseId });
+
+    if (!progress) {
+      return res.status(404).json({
+        success: false,
+        message: "Progress not found!",
+      });
+    }
+
+    progress.lecturesProgress = [];
+    progress.completed = false;
+    progress.completionDate = null;
+
+    await progress.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Course progress has been reset",
+      data: progress,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -101,7 +183,7 @@ const resetCurrentCourseProgress = async (req, res) => {
 };
 
 export {
-  markCurrentLecureAsViewd,
+  markCurrentLecureAsViewed,
   resetCurrentCourseProgress,
   getCurrentCourseProgress,
 };
