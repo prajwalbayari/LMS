@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
   userName: {
@@ -16,9 +16,13 @@ const UserSchema = new mongoose.Schema({
     required: true,
     minLength: 6,
   },
-  role: String,
+  role: {
+    type: String,
+    enum: ["user", "instructor"],
+    default: "user"
+  },
 });
 
-const schema=mongoose.model("User", UserSchema);
+const schema = mongoose.model("User", UserSchema);
 
 export default schema;
