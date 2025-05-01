@@ -13,7 +13,7 @@ import {
   courseLandingInitialFormData,
 } from "@/config";
 import { InstructorContext } from "@/context/instructor-context";
-import { Delete, Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -73,7 +73,7 @@ function InstructorCourses({ listOfCourses }) {
                           <Edit className="h-6 w-6" />
                         </Button>
                         <Button variant="ghost" size="sm">
-                          <Delete className="h-6 w-6" />
+                          <Trash2 className="h-6 w-6" />
                         </Button>
                       </TableCell>
                     </TableRow>

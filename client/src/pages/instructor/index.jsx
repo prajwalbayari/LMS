@@ -13,9 +13,10 @@ function InstructorDashboardPage() {
   const { resetCredentials } = useContext(AuthContext);
   const { instructorCoursesList, setInstructorCourseList } =
     useContext(InstructorContext);
+  const { auth } = useContext(AuthContext);
 
   async function fetchAllCourses() {
-    const response = await fetchInstructorCourseListService();
+    const response = await fetchInstructorCourseListService(auth?.user?._id);
     if (response?.success) setInstructorCourseList(response?.data);
   }
 

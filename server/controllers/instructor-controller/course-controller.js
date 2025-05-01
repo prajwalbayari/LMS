@@ -22,7 +22,9 @@ const addNewCourse = async (req, res) => {
 
 const getAllCourses = async (req, res) => {
   try {
-    const courseList = await Course.find({});
+    const { id } = req.params;
+    const courseList = await Course.find({ instructorId: id });
+
     res.status(200).json({
       success: true,
       data: courseList,
