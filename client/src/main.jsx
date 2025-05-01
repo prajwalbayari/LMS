@@ -8,15 +8,13 @@ import InstructorProvider from "./context/instructor-context";
 import StudentProvider from "./context/student-context";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <InstructorProvider>
-          <StudentProvider>
-            <App />
-          </StudentProvider>
-        </InstructorProvider>
-      </AuthProvider>
-    </BrowserRouter>
-  </StrictMode>
+  <BrowserRouter>
+    <AuthProvider>
+      <InstructorProvider>
+        <StudentProvider>
+          <App />
+        </StudentProvider>
+      </InstructorProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );
