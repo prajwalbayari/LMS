@@ -16,6 +16,7 @@ import {
   updateCourseByIdService,
 } from "@/services";
 import { useContext, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 
 function AddNewCoursePage() {
@@ -74,7 +75,6 @@ function AddNewCoursePage() {
       curriculum: courseCurriculumFormData,
       isPublished: true,
     };
-    console.log(courseFinalFormData, "CourseFinalFormData");
 
     const response =
       currentEditedCourseId !== null
@@ -87,6 +87,11 @@ function AddNewCoursePage() {
     if (response?.success) {
       setCourseLandingFormData(courseLandingInitialFormData);
       setCourseCurriculumFormData(courseCurriculumInitialFormData);
+      if (currentEditedCourseId !== null) {
+        toast.success("Course Updated Successfully");
+      } else {
+        toast.success("New Course Created Successfully");
+      }
       setCurrentEditedCourseId(null);
       navigate(-1);
     }

@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { captureAndFinalizePaymentService } from "@/services";
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { useLocation } from "react-router-dom";
 
 function PaypalPaymentReturnPage() {
@@ -22,6 +23,7 @@ function PaypalPaymentReturnPage() {
         if (response.success) {
           sessionStorage.removeItem("currentOrderId");
           window.location.href = "/student-courses";
+          toast.success("Course purchased successfully");
         }
       }
 

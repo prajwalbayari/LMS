@@ -7,11 +7,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { signinFormControls, signupFormControls } from "@/config";
+import {
+  initialSignInFormData,
+  initialSignUpFormData,
+  signinFormControls,
+  signupFormControls,
+} from "@/config";
 import { AuthContext } from "@/context/auth-context";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { GraduationCap } from "lucide-react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function AuthPage() {
@@ -26,6 +31,8 @@ function AuthPage() {
   } = useContext(AuthContext);
 
   function handleTabChange(value) {
+    setSignInFormData(initialSignInFormData);
+    setSignUpFormData(initialSignUpFormData);
     setActiveTab(value);
   }
 
@@ -45,6 +52,11 @@ function AuthPage() {
       /^[a-zA-Z0-9.]+@gmail\.com$/.test(signUpFormData.userEmail)
     );
   }
+
+  useEffect(() => {
+    setSignInFormData(initialSignInFormData);
+    setSignUpFormData(initialSignUpFormData);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen">

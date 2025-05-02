@@ -2,6 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { initialSignInFormData, initialSignUpFormData } from "@/config";
 import { checkAuthService, loginService, registerService } from "@/services";
 import { createContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const AuthContext = createContext(null);
 
@@ -17,31 +18,49 @@ export default function AuthProvider({ children }) {
   async function handleRegisteredUser(event) {
     event.preventDefault();
     console.log(signUpFormData);
-    const data = await registerService(signUpFormData);
-    console.log(data);
+    try {
+      const data = await registerService(signUpFormData);
+      toast.success(data?.data?.message);
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message);
+    }
   }
 
   async function handleLoginUser(event) {
     event.preventDefault();
-    const { data: response } = await loginService(signInFormData);
-    console.log(response);
-    if (response.success) {
-      sessionStorage.setItem(
-        "accessToken",
-        JSON.stringify(response.data.accessToken)
-      );
-      setAuth({ authenticated: true, user: response.data.user });
-      setLoading(false);
-    } else {
+    try {
+      const { data: response } = await loginService(signInFormData);
+      console.log(response);
+      if (response.success) {
+        sessionStorage.setItem(
+          "accessToken",
+          JSON.stringify(response.data.accessToken)
+        );
+        setAuth({ authenticated: true, user: response.data.user });
+        setLoading(false);
+        toast.success(response?.message);
+      } else {
+        toast.error("Invalid credentials");
+        setAuth({
+          authenticated: false,
+          user: null,
+        });
+      }
+    } catch (error) {
+      console.error("Login error: ", error);
+      toast.error(error?.response?.data?.message);
       setAuth({
         authenticated: false,
         user: null,
       });
-      console.log(loading);
+    } finally {
+      setLoading(false);
     }
   }
 
   //Check authenticated user
+
   async function checkAuthUser() {
     try {
       const { data: response } = await checkAuthService();

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { AuthContext } from "@/context/auth-context";
 import { useContext } from "react";
+import toast from "react-hot-toast";
 
 function StudentViewCommonHeader() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function StudentViewCommonHeader() {
   function handleLogout() {
     resetCredentials();
     sessionStorage.clear();
+    toast.success("Logged out");
   }
 
   return (
