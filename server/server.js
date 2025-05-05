@@ -19,12 +19,21 @@ const MONGO_URI = process.env.MONGO_URI;
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: "https://lms-frontend-henna-delta.vercel.app",
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
+
+//Preflight requests
+app.options("*", cors({
+  origin: process.env.CLIENT_URL,
+  methods: ["GET", "POST", "DELETE", "PUT"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
+
 //DATBASE CONNECTION
 
 mongoose
