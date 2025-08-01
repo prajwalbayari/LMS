@@ -13,13 +13,15 @@ import StudentViewCourseDetailsPage from "./pages/student/course-details";
 import PaypalPaymentReturnPage from "./pages/student/payment-return";
 import StudentCoursesPage from "./pages/student/student-courses";
 import StudentViewCourseProgressPage from "./pages/student/course-progress";
-import { Toaster } from "react-hot-toast";
+import { Toaster as HotToaster } from "react-hot-toast";
+import { Toaster } from "./components/ui/toaster";
 
 const App = () => {
   const { auth } = useContext(AuthContext);
   return (
     <div>
-      <Toaster position="top-center" reverseOrder={false} />
+      <HotToaster position="top-center" reverseOrder={false} />
+      <Toaster />
       <Routes>
         <Route
           path="/auth"

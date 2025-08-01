@@ -1,5 +1,6 @@
 import Course from "../../models/Course.js";
 import StudentCourses from "../../models/StudentCourses.js";
+import CourseProgress from "../../models/CourseProgress.js";
 
 const addNewCourse = async (req, res) => {
   try {
@@ -113,4 +114,48 @@ const updateCourseById = async (req, res) => {
   }
 };
 
-export { getAllCourses, getCourseDetailsById, addNewCourse, updateCourseById };
+const deleteCourseById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Check if course exists
+    const existingCourse = await Course.findById(id);
+    if (!existingCourse) {
+      return res.status(404).json({
+        success: false,
+        message: "Course not found!",
+      });
+    }
+
+    // Delete the course from the main Course collection
+    await Course.findByIdAndDelete(id);
+
+    // Remove this course from all students' purchased courses
+    await StudentCourses.updateMany(
+      { "courses.courseId": id },
+      {
+        $pull: {
+          courses: { courseId: id }
+        }
+      }
+    );
+
+    // Delete all course progress records for this course
+    await CourseProgress.deleteMany({ courseId: id });
+
+    // Clean up empty StudentCourses documents (students with no courses left)
+    await StudentCourses.deleteMany({ courses: { $size: 0 } });
+
+    res.status(200).json({
+      success: true,
+      message: "Course deleted successfully!",
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Some error occurred!" });
+  }
+};
+
+export { getAllCourses, getCourseDetailsById, addNewCourse, updateCourseById, deleteCourseById };

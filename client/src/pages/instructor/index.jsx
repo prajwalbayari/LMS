@@ -35,7 +35,7 @@ function InstructorDashboardPage() {
       icon: Book,
       label: "Courses",
       value: "courses",
-      component: <InstructorCourses listOfCourses={instructorCoursesList} />,
+      component: <InstructorCourses listOfCourses={instructorCoursesList} onCourseDeleted={fetchAllCourses} />,
     },
     {
       icon: LogOut,
